@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="yandex_storeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Delivery">
+    <Key>
+      <PropertyRef Name="delivery_id" />
+    </Key>
+    <Property Name="delivery_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="orders_id" Type="Int32" />
+    <Property Name="delivery_status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="estimated_delivery_date" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK__Delivery__orders__4D94879B" FromRole="Delivery" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Order_Products">
+    <Key>
+      <PropertyRef Name="Order_Product" />
+    </Key>
+    <Property Name="Order_Product" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="order_id" Type="Int32" />
+    <Property Name="products_id" Type="Int32" />
+    <Property Name="quantity" Type="Int32" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK__Order_Pro__order__6754599E" FromRole="Order_Products" ToRole="Orders" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Order_Pro__produ__68487DD7" FromRole="Order_Products" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="order_id" />
+    </Key>
+    <Property Name="order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="order_date" Type="DateTime" Precision="0" />
+    <Property Name="total_amount" Type="Decimal" Precision="10" Scale="2" />
+    <NavigationProperty Name="Delivery" Relationship="Self.FK__Delivery__orders__4D94879B" FromRole="Orders" ToRole="Delivery" />
+    <NavigationProperty Name="Order_Products" Relationship="Self.FK__Order_Pro__order__6754599E" FromRole="Orders" ToRole="Order_Products" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="product_id" />
+    </Key>
+    <Property Name="product_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="product_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="price" Type="Int32" />
+    <Property Name="stock_quantity" Type="Int32" />
+    <NavigationProperty Name="Order_Products" Relationship="Self.FK__Order_Pro__produ__68487DD7" FromRole="Products" ToRole="Order_Products" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK__Delivery__orders__4D94879B">
+    <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+    <End Role="Delivery" Type="Self.Delivery" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="order_id" />
+      </Principal>
+      <Dependent Role="Delivery">
+        <PropertyRef Name="orders_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Order_Pro__order__6754599E">
+    <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+    <End Role="Order_Products" Type="Self.Order_Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="order_id" />
+      </Principal>
+      <Dependent Role="Order_Products">
+        <PropertyRef Name="order_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Order_Pro__produ__68487DD7">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="Order_Products" Type="Self.Order_Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="product_id" />
+      </Principal>
+      <Dependent Role="Order_Products">
+        <PropertyRef Name="products_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="yandex_storeEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Delivery" EntityType="Self.Delivery" />
+    <EntitySet Name="Order_Products" EntityType="Self.Order_Products" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" />
+    <EntitySet Name="Products" EntityType="Self.Products" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK__Delivery__orders__4D94879B" Association="Self.FK__Delivery__orders__4D94879B">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="Delivery" EntitySet="Delivery" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Order_Pro__order__6754599E" Association="Self.FK__Order_Pro__order__6754599E">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="Order_Products" EntitySet="Order_Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Order_Pro__produ__68487DD7" Association="Self.FK__Order_Pro__produ__68487DD7">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Order_Products" EntitySet="Order_Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
